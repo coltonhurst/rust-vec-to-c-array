@@ -15,7 +15,7 @@ pub struct Person {
 #[repr(C)]
 pub struct Bus {
     busName: String,
-    people: Vec<Person>,
+    people: Vec<*mut Person>,
 }
 
 fn main() {
@@ -27,14 +27,18 @@ fn main() {
 
     // listPeopleOnTheBus() test
     println!("listPeopleOnTheBus() test");
-    let bobby = Person { name: String::from("Bobby"), age: 100 };
-    let susan = Person { name: String::from("Susan"), age: 99 };
+    let mut bobby = Person { name: String::from("Bobby"), age: 100 };
+    let bobby_ptr: *mut Person = &mut bobby;
 
-    let people: Vec<Person> = vec![bobby, susan];
-    let mut bus = Bus { busName: String::from("City Bus"),  people };
+    let mut susan = Person { name: String::from("Susan"), age: 99 };
+    let susan_ptr: *mut Person = &mut susan;
+
+    let people: Vec<*mut Person> = vec![bobby_ptr, susan_ptr];
+
+    let mut bus = Bus { busName: String::from("City Bus"), people };
     let bus_ptr: *mut Bus = &mut bus;
 
     unsafe {
-        println!("test(): {:?}", listPeopleOnTheBus(bus_ptr, 2));
+        println!("listPeopleOnTheBus(): {:?}", listPeopleOnTheBus(bus_ptr, 2));
     }
 }
