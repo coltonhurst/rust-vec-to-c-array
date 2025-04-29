@@ -8,34 +8,39 @@ unsafe extern "C" {
 
 #[repr(C)]
 pub struct Person {
-    name: String,
-    age: i32,
+    name: *mut u8,
+    age: c_int,
 }
 
 #[repr(C)]
 pub struct Bus {
-    busName: String,
+    busName: *mut u8,
     people: Vec<*mut Person>,
 }
 
 fn main() {
     // test() test
     println!("test() test");
+
     unsafe {
         println!("test(): {:?}", test());
     }
 
     // listPeopleOnTheBus() test
     println!("listPeopleOnTheBus() test");
-    let mut bobby = Person { name: String::from("Bobby"), age: 100 };
+
+    let bobby_name: *mut u8 = unsafe { String::from("Bobby").as_bytes_mut().as_mut_ptr() };
+    let mut bobby = Person { name: bobby_name, age: 100 };
     let bobby_ptr: *mut Person = &mut bobby;
 
-    let mut susan = Person { name: String::from("Susan"), age: 99 };
+    let susan_name: *mut u8 = unsafe { String::from("Susan").as_bytes_mut().as_mut_ptr() };
+    let mut susan = Person { name: susan_name, age: 99 };
     let susan_ptr: *mut Person = &mut susan;
 
     let people: Vec<*mut Person> = vec![bobby_ptr, susan_ptr];
 
-    let mut bus = Bus { busName: String::from("City Bus"), people };
+    let bus_name: *mut u8 = unsafe { String::from("City Bus").as_bytes_mut().as_mut_ptr() };
+    let mut bus = Bus { busName: bus_name, people };
     let bus_ptr: *mut Bus = &mut bus;
 
     unsafe {
