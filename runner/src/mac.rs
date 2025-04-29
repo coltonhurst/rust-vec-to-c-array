@@ -2,7 +2,6 @@ extern crate core;
 use core::ffi::c_int;
 
 unsafe extern "C" {
-    fn test() -> c_int;
     fn listPeopleOnTheBus(bus: *mut Bus, peopleCount: c_int);
 }
 
