@@ -1,5 +1,4 @@
-mod mac;
-mod windows;
+mod list_test;
 
 extern crate core;
 use core::ffi::c_int;
@@ -9,13 +8,11 @@ unsafe extern "C" {
 }
 
 fn main() {
+    println!("----- Test -----");
     unsafe {
-        println!("test(): {:?}", test());
+        println!("{:?}\n", test());
     }
 
-    println!("----- Mac Test -----");
-    mac::mac_test();
-
-    println!("----- Windows Test -----");
-    windows::windows_test();
+    println!("----- List Test -----");
+    list_test::list_test();
 }

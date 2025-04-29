@@ -1,4 +1,5 @@
 # rust-vec-to-c-array
-passing a rust vec to be used as an array in C
 
-this is an in-progress experiment...
+This is an example demonstrating how to iterate through a Rust vec in C, and the FFI between them. Specifically, passing a pointer to a list of pointers.
+
+You can see the isolated C example in [main.c](./lib/main.c) and the Rust <-> C FFI in [main.rs](./runner/src/main.rs) and [lib.c](./runner/c/lib.c).

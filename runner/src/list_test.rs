@@ -1,10 +1,6 @@
-/*
-    This code is the same as mac.rs but the `bus_name`
-    is being handled differently.
-*/
-
 extern crate core;
-use core::ffi::c_int;
+
+use std::ffi::{CString, c_int};
 
 unsafe extern "C" {
     fn listPeopleOnTheBus(bus: *mut Bus, peopleCount: c_int);
@@ -23,12 +19,12 @@ pub struct Bus {
     people: *mut *mut Person,
 }
 
-pub fn windows_test() {
-    let bobby_name = std::ffi::CString::new("Bobby").expect("expect cstring");
-    let susan_name = std::ffi::CString::new("Susan").expect("expect cstring");
-    let joey_name = std::ffi::CString::new("Joey Appleseed").expect("expect cstring");
-    let anna_name = std::ffi::CString::new("Anna Johnson").expect("expect cstring");
-    let bus_name = std::ffi::CString::new("City Bus Blue").expect("expect cstring");
+pub fn list_test() {
+    let bobby_name = CString::new("Bobby").expect("expect cstring");
+    let susan_name = CString::new("Susan").expect("expect cstring");
+    let joey_name = CString::new("Joey Appleseed").expect("expect cstring");
+    let anna_name = CString::new("Anna Johnson").expect("expect cstring");
+    let bus_name = CString::new("City Bus Blue").expect("expect cstring");
 
     // Bobby
     let mut bobby = Person {
@@ -69,6 +65,6 @@ pub fn windows_test() {
 
     // C FFI function call
     unsafe {
-        println!("listPeopleOnTheBus(): {:?}", listPeopleOnTheBus(bus_ptr, 4));
+        listPeopleOnTheBus(bus_ptr, 4);
     }
 }
