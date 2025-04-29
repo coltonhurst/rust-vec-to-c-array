@@ -20,6 +20,7 @@ pub struct Bus {
 pub fn windows_test() {
     let bobby_name = String::from("Bobby");
     let susan_name = String::from("Susan");
+    let joey_name = String::from("Joey");
     let bus_name = String::from("City Bus");
 
     let mut bobby_name = bobby_name.into_bytes();
@@ -40,7 +41,16 @@ pub fn windows_test() {
     };
     let susan_ptr: *mut Person = &mut susan;
 
-    let mut people: Vec<*mut Person> = vec![bobby_ptr, susan_ptr];
+    let mut joey_name = joey_name.into_bytes();
+    joey_name.push(0);
+    let joey_name: *mut u8 = joey_name.as_mut_ptr();
+    let mut joey = Person {
+        name: joey_name,
+        age: 100,
+    };
+    let joey_ptr: *mut Person = &mut joey;
+
+    let mut people: Vec<*mut Person> = vec![bobby_ptr, susan_ptr, joey_ptr];
 
     let mut bus_name = bus_name.into_bytes();
     bus_name.push(0);
