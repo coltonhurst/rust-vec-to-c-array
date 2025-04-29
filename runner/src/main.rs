@@ -15,7 +15,7 @@ pub struct Person {
 #[repr(C)]
 pub struct Bus {
     busName: *mut u8,
-    people: Vec<*mut Person>,
+    people: *mut *mut Person,
 }
 
 fn main() {
@@ -29,18 +29,31 @@ fn main() {
     // listPeopleOnTheBus() test
     println!("listPeopleOnTheBus() test");
 
-    let bobby_name: *mut u8 = unsafe { String::from("Bobby").as_bytes_mut().as_mut_ptr() };
-    let mut bobby = Person { name: bobby_name, age: 100 };
+    let mut bobby_name = String::from("Bobby");
+    let mut susan_name = String::from("Susan");
+    let mut bus_name = String::from("City Bus");
+
+    let bobby_name: *mut u8 = unsafe { bobby_name.as_bytes_mut().as_mut_ptr() };
+    let mut bobby = Person {
+        name: bobby_name,
+        age: 100,
+    };
     let bobby_ptr: *mut Person = &mut bobby;
 
-    let susan_name: *mut u8 = unsafe { String::from("Susan").as_bytes_mut().as_mut_ptr() };
-    let mut susan = Person { name: susan_name, age: 99 };
+    let susan_name: *mut u8 = unsafe { susan_name.as_bytes_mut().as_mut_ptr() };
+    let mut susan = Person {
+        name: susan_name,
+        age: 99,
+    };
     let susan_ptr: *mut Person = &mut susan;
 
-    let people: Vec<*mut Person> = vec![bobby_ptr, susan_ptr];
+    let mut people: Vec<*mut Person> = vec![bobby_ptr, susan_ptr];
 
-    let bus_name: *mut u8 = unsafe { String::from("City Bus").as_bytes_mut().as_mut_ptr() };
-    let mut bus = Bus { busName: bus_name, people };
+    let bus_name: *mut u8 = unsafe { bus_name.as_bytes_mut().as_mut_ptr() };
+    let mut bus = Bus {
+        busName: bus_name,
+        people: people.as_mut_ptr(),
+    };
     let bus_ptr: *mut Bus = &mut bus;
 
     unsafe {
