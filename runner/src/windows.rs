@@ -12,56 +12,63 @@ unsafe extern "C" {
 
 #[repr(C)]
 pub struct Person {
-    name: *mut u8,
+    name: *const i8,
     age: c_int,
 }
 
 #[allow(non_snake_case)]
 #[repr(C)]
 pub struct Bus {
-    busName: *mut u8,
+    busName: *const i8,
     people: *mut *mut Person,
 }
 
 pub fn windows_test() {
-    let mut bobby_name = String::from("Bobby");
-    let mut susan_name = String::from("Susan");
-    let mut joey_name = String::from("Joey Appleseed");
-    let bus_name = String::from("City Bus");
+    let bobby_name = std::ffi::CString::new("Bobby").expect("expect cstring");
+    let susan_name = std::ffi::CString::new("Susan").expect("expect cstring");
+    let joey_name = std::ffi::CString::new("Joey Appleseed").expect("expect cstring");
+    let anna_name = std::ffi::CString::new("Anna Johnson").expect("expect cstring");
+    let bus_name = std::ffi::CString::new("City Bus Blue").expect("expect cstring");
 
-    let bobby_name: *mut u8 = unsafe { bobby_name.as_bytes_mut().as_mut_ptr() };
+    // Bobby
     let mut bobby = Person {
-        name: bobby_name,
+        name: bobby_name.as_ptr(),
         age: 100,
     };
     let bobby_ptr: *mut Person = &mut bobby;
 
-    let susan_name: *mut u8 = unsafe { susan_name.as_bytes_mut().as_mut_ptr() };
+    // Susan
     let mut susan = Person {
-        name: susan_name,
+        name: susan_name.as_ptr(),
         age: 99,
     };
     let susan_ptr: *mut Person = &mut susan;
 
-    let joey_name: *mut u8 = unsafe { joey_name.as_bytes_mut().as_mut_ptr() };
+    // Joey
     let mut joey = Person {
-        name: joey_name,
-        age: 99,
+        name: joey_name.as_ptr(),
+        age: 98,
     };
     let joey_ptr: *mut Person = &mut joey;
 
-    let mut people: Vec<*mut Person> = vec![bobby_ptr, susan_ptr, joey_ptr];
+    // Anna
+    let anna_name = anna_name.as_ptr();
+    let mut anna = Person {
+        name: anna_name,
+        age: 97,
+    };
+    let anna_ptr: *mut Person = &mut anna;
 
-    let mut bus_name = bus_name.into_bytes();
-    bus_name.push(0);
-    let bus_name: *mut u8 = bus_name.as_mut_ptr();
+    // Bus
+    let mut people: Vec<*mut Person> = vec![bobby_ptr, susan_ptr, joey_ptr, anna_ptr];
     let mut bus = Bus {
-        busName: bus_name,
+        busName: bus_name.as_ptr(),
         people: people.as_mut_ptr(),
     };
     let bus_ptr: *mut Bus = &mut bus;
 
+    // C FFI function call
     unsafe {
-        println!("listPeopleOnTheBus(): {:?}", listPeopleOnTheBus(bus_ptr, 3));
+        println!("listPeopleOnTheBus(): {:?}", listPeopleOnTheBus(bus_ptr, 4));
     }
 }

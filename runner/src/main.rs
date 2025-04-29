@@ -12,8 +12,10 @@ fn main() {
     unsafe {
         println!("test(): {:?}", test());
     }
+
     println!("----- Mac Test -----");
     mac::mac_test();
+
     println!("----- Windows Test -----");
     windows::windows_test();
 }
