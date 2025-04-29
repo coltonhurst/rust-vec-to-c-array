@@ -1,3 +1,8 @@
+/*
+    This code is the same as windows.rs but the `bus_name`
+    is being handled differently.
+*/
+
 extern crate core;
 use core::ffi::c_int;
 
@@ -11,6 +16,7 @@ pub struct Person {
     age: c_int,
 }
 
+#[allow(non_snake_case)]
 #[repr(C)]
 pub struct Bus {
     busName: *mut u8,
@@ -20,6 +26,7 @@ pub struct Bus {
 pub fn mac_test() {
     let mut bobby_name = String::from("Bobby");
     let mut susan_name = String::from("Susan");
+    let mut joey_name = String::from("Joey Appleseed");
     let mut bus_name = String::from("City Bus");
 
     let bobby_name: *mut u8 = unsafe { bobby_name.as_bytes_mut().as_mut_ptr() };
@@ -36,7 +43,14 @@ pub fn mac_test() {
     };
     let susan_ptr: *mut Person = &mut susan;
 
-    let mut people: Vec<*mut Person> = vec![bobby_ptr, susan_ptr];
+    let joey_name: *mut u8 = unsafe { joey_name.as_bytes_mut().as_mut_ptr() };
+    let mut joey = Person {
+        name: joey_name,
+        age: 99,
+    };
+    let joey_ptr: *mut Person = &mut joey;
+
+    let mut people: Vec<*mut Person> = vec![bobby_ptr, susan_ptr, joey_ptr];
 
     let bus_name: *mut u8 = unsafe { bus_name.as_bytes_mut().as_mut_ptr() };
     let mut bus = Bus {
@@ -46,6 +60,6 @@ pub fn mac_test() {
     let bus_ptr: *mut Bus = &mut bus;
 
     unsafe {
-        println!("listPeopleOnTheBus(): {:?}", listPeopleOnTheBus(bus_ptr, 2));
+        println!("listPeopleOnTheBus(): {:?}", listPeopleOnTheBus(bus_ptr, 3));
     }
 }

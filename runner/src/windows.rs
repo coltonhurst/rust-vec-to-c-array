@@ -1,3 +1,8 @@
+/*
+    This code is the same as mac.rs but the `bus_name`
+    is being handled differently.
+*/
+
 extern crate core;
 use core::ffi::c_int;
 
@@ -11,6 +16,7 @@ pub struct Person {
     age: c_int,
 }
 
+#[allow(non_snake_case)]
 #[repr(C)]
 pub struct Bus {
     busName: *mut u8,
@@ -18,35 +24,29 @@ pub struct Bus {
 }
 
 pub fn windows_test() {
-    let bobby_name = String::from("Bobby");
-    let susan_name = String::from("Susan");
-    let joey_name = String::from("Joey");
+    let mut bobby_name = String::from("Bobby");
+    let mut susan_name = String::from("Susan");
+    let mut joey_name = String::from("Joey Appleseed");
     let bus_name = String::from("City Bus");
 
-    let mut bobby_name = bobby_name.into_bytes();
-    bobby_name.push(0);
-    let bobby_name: *mut u8 = bobby_name.as_mut_ptr();
+    let bobby_name: *mut u8 = unsafe { bobby_name.as_bytes_mut().as_mut_ptr() };
     let mut bobby = Person {
         name: bobby_name,
         age: 100,
     };
     let bobby_ptr: *mut Person = &mut bobby;
 
-    let mut susan_name = susan_name.into_bytes();
-    susan_name.push(0);
-    let susan_name: *mut u8 = susan_name.as_mut_ptr();
+    let susan_name: *mut u8 = unsafe { susan_name.as_bytes_mut().as_mut_ptr() };
     let mut susan = Person {
         name: susan_name,
-        age: 100,
+        age: 99,
     };
     let susan_ptr: *mut Person = &mut susan;
 
-    let mut joey_name = joey_name.into_bytes();
-    joey_name.push(0);
-    let joey_name: *mut u8 = joey_name.as_mut_ptr();
+    let joey_name: *mut u8 = unsafe { joey_name.as_bytes_mut().as_mut_ptr() };
     let mut joey = Person {
         name: joey_name,
-        age: 100,
+        age: 99,
     };
     let joey_ptr: *mut Person = &mut joey;
 
@@ -62,6 +62,6 @@ pub fn windows_test() {
     let bus_ptr: *mut Bus = &mut bus;
 
     unsafe {
-        println!("listPeopleOnTheBus(): {:?}", listPeopleOnTheBus(bus_ptr, 2));
+        println!("listPeopleOnTheBus(): {:?}", listPeopleOnTheBus(bus_ptr, 3));
     }
 }
